@@ -11,6 +11,11 @@ function DetailItem({ items }) {
 
   return detailItem ? (
     <div className="detail-item-component">
+      {/* one possible solution */}
+      {
+        // eslint-disable-next-line
+        Object.keys(detailItem).includes('salePrice') && <div>On Sale!</div>
+      }
       <img
         src={ItemImages[detailItem.imageId]}
         alt={detailItem.title}
