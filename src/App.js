@@ -6,7 +6,7 @@ import Home from './components/Home';
 function App() {
   return (
     <>
-      <Header />
+      <Header title="Code Café" />
       <Home items={items} />
     </>
   );
