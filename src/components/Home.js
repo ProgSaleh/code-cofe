@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import itemType from '../types/item';
 import './Home.css';
 import Thumbnail from './Thumbnail';
-import { itemImages } from '../items';
+import { ItemImages } from '../items';
 
 function Home({ items }) {
   return (
@@ -13,7 +13,7 @@ function Home({ items }) {
           key={item.itemId}
           itemId={item.itemId}
           title={item.title}
-          image={itemImages[item.imageId]}
+          image={ItemImages[item.imageId]}
         />
       ))}
     </div>

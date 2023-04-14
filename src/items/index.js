@@ -9,7 +9,7 @@ import Milk from './milk.svg';
 import Sandwich from './sandwich.svg';
 import Tea from './tea.svg';
 
-export const itemImages = {
+export const ItemImages = {
   coffee: Coffee,
   cookie: Cookie,
   croissant: Croissant,

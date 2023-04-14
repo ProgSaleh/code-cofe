@@ -2,7 +2,7 @@
 import { Outlet } from 'react-router-dom';
 // eslint-disable-next-line
 import PropTypes from 'prop-types';
-import { itemImages } from '../items';
+import { ItemImages } from '../items';
 import ItemType from '../types/item';
 import Thumbnail from './Thumbnail';
 import './Details.css';
@@ -15,7 +15,7 @@ function Details({ items }) {
         {items.map((item) => (
           <Thumbnail
             key={item.itemId}
-            image={itemImages[item.imageId]}
+            image={ItemImages[item.imageId]}
             title={item.title}
             itemId={item.itemId}
           />
