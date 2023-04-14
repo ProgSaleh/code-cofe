@@ -27,3 +27,8 @@
   text-align: center;
   white-space: nowrap;
 }
+
+.thumbnail-component:hover img {
+  transform: scale(1.2);
+  transition: transform 333ms ease;
+}

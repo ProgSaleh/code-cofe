@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 import PropTypes from 'prop-types';
 
-const itemType = PropTypes.shape({
+const ItemType = PropTypes.shape({
   itemId: PropTypes.string.isRequired,
   imageId: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
@@ -11,4 +11,4 @@ const itemType = PropTypes.shape({
   // eslint-disable-next-line
 });
 
-export default itemType;
+export default ItemType;

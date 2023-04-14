@@ -11,6 +11,7 @@ function Home({ items }) {
       {items.map((item) => (
         <Thumbnail
           key={item.itemId}
+          itemId={item.itemId}
           title={item.title}
           image={itemImages[item.imageId]}
         />
