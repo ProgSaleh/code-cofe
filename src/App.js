@@ -8,6 +8,8 @@ import Home from './components/Home';
 import NotFound from './components/NotFound';
 import Details from './components/Details';
 import DetailItem from './components/DetailItem';
+import Rewards from './components/Rewards';
+import Tier from './components/Tier';
 
 function App() {
   const [items, setItems] = useState([]);
@@ -26,8 +28,11 @@ function App() {
           <Route path=":id" element={<DetailItem />} />
           <Route index element={<div>No Item Selected</div>} />
         </Route>
+        <Route path="/rewards" element={<Rewards />}>
+          <Route path=":tier" element={<Tier />} />
+          <Route index element={<div>No Tiers Requested Yet.</div>} />
+        </Route>
         <Route path="/" element={<Home items={items} />} />
-        {/* <Route index element={<Home items={items} />} /> */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
