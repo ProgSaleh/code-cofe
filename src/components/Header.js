@@ -1,21 +1,37 @@
 // eslint-disable-next-line
 import { Link } from 'react-router-dom';
-import logo from '../images/logo.svg';
+import PropTypes from 'prop-types';
+import CoffeeLogo from '../images/logo.svg';
+import CartIcon from '../images/cart.svg';
 import './Header.css';
 
-function Header() {
+function Header({ cart }) {
+  const cartQuantity = cart.reduce((acc, item) => acc + item.quantity, 0);
+
   return (
-    // <Link to="/" className="header-component">
-    //   <img src={logo} alt="coffee logo" />
-    //   <p>Code Café</p>
-    // </Link>
     <header className="header-component">
       <Link to="/">
-        <img src={logo} alt="coffee logo" />
-        <p>Code Café</p>
+        <img src={CoffeeLogo} alt="coffee logo" />
+        <h1>Code Café</h1>
       </Link>
+      <div className="menu">
+        <Link to="#todo">
+          <img src={CartIcon} alt="Cart" />
+          <div className="badge">{cartQuantity}</div>
+        </Link>
+      </div>
     </header>
   );
 }
+
+Header.propTypes = {
+  cart: PropTypes.arrayOf(
+    PropTypes.shape({
+      itemId: PropTypes.string.isRequired,
+      quantity: PropTypes.number.isRequired,
+      // eslint-disable-next-line
+    })
+  ).isRequired,
+};
 
 export default Header;

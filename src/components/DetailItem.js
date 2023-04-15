@@ -4,10 +4,17 @@ import PropTypes from 'prop-types';
 import { ItemImages } from '../items';
 import ItemType from '../types/item';
 import './DetailItem.css';
+// eslint-disable-next-line
+import { CartTypes } from '../reducers/cartReducer';
 
-function DetailItem({ items }) {
+// eslint-disable-next-line
+function DetailItem({ addToCart, items }) {
   const { id } = useParams();
   const detailItem = items.find((item) => item.itemId === id);
+
+  const addItemToCart = () => {
+    addToCart(detailItem.itemId);
+  };
 
   return detailItem ? (
     <div className="detail-item-component">
@@ -25,6 +32,9 @@ function DetailItem({ items }) {
         }
         {detailItem.salePrice ?? detailItem.price.toFixed(2)}
       </div>
+      <button type="button" onClick={addItemToCart}>
+        Add to Cart
+      </button>
     </div>
   ) : (
     <h2>Unknown Item</h2>
@@ -33,6 +43,7 @@ function DetailItem({ items }) {
 
 DetailItem.propTypes = {
   items: PropTypes.arrayOf(ItemType).isRequired,
+  addToCart: PropTypes.func.isRequired,
 };
 
 export default DetailItem;
