@@ -19,7 +19,6 @@ function App() {
   const [items, setItems] = useState([]);
   const [cart, dispatch] = useReducer(cartReducer, initialCartState);
   const addToCart = (itemId) => dispatch({ type: CartTypes.ADD, itemId });
-  // dispatch({ type: CartTypes.REMOVE, itemId });
 
   useEffect(() => {
     axios
