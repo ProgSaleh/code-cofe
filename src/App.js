@@ -13,11 +13,13 @@ import {
   CartTypes,
   initialCartState,
 } from './reducers/cartReducer';
+import Cart from './components/Cart';
 
 function App() {
   const [items, setItems] = useState([]);
   const [cart, dispatch] = useReducer(cartReducer, initialCartState);
   const addToCart = (itemId) => dispatch({ type: CartTypes.ADD, itemId });
+  // dispatch({ type: CartTypes.REMOVE, itemId });
 
   useEffect(() => {
     axios
@@ -41,7 +43,10 @@ function App() {
             <Route index element={<div>No Item Selected</div>} />
           </Route>
           <Route path="/" element={<Home items={items} />} />
-          {/* <Route index element={<Home items={items} />} /> */}
+          <Route
+            path="/cart"
+            element={<Cart cart={cart} items={items} dispatch={dispatch} />}
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       )}
