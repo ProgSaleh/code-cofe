@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+// eslint-disable-next-line
+import { PatternFormat } from 'react-number-format';
 import ItemType from '../types/item';
 import CartRow from './CartRow';
 import './Cart.css';
@@ -23,22 +25,6 @@ function Cart({ cart, items, dispatch }) {
 
   const submitOrder = (event) => {
     event.preventDefault();
-  };
-
-  const setFormattedPhone = (newNumber) => {
-    const digits = newNumber.replace(/\D/g, '');
-    let formatted = digits.substring(0, 3);
-    if (digits.length === 3 && newNumber[3] === '-') {
-      formatted = `${formatted}-`;
-    } else if (digits.length > 3) {
-      formatted = `${formatted}-${digits.substring(3, 6)}`;
-    }
-    if (digits.length === 6 && newNumber[7] === '-') {
-      formatted = `${formatted}-`;
-    } else if (digits.length > 6) {
-      formatted = `${formatted}-${digits.substring(6, 10)}`;
-    }
-    setPhone(formatted);
   };
 
   const isFormValid = zipCode.length === 5 && name.trim();
@@ -108,13 +94,16 @@ function Cart({ cart, items, dispatch }) {
                 required
               />
             </label>
+            {/* eslint-disable-next-line */}
             <label htmlFor="phone">
               Phone:
-              <input
-                type="tel"
+              <PatternFormat
+                format="###-###-####"
                 id="phone"
                 value={phone}
-                onChange={(e) => setFormattedPhone(e.target.value)}
+                onValueChange={(values) => {
+                  setPhone(values.formattedValue);
+                }}
               />
             </label>
             <label htmlFor="zipcode">
