@@ -2,6 +2,12 @@ import PropTypes from 'prop-types';
 import ItemType from '../types/item';
 import { CartTypes } from '../reducers/cartReducer';
 
+const quantityStyle = {
+  borderRadius: '0.3rem',
+  border: '1px solid #999',
+  fontSize: '115%',
+};
+
 function CartRow({ cartItem, items, dispatch }) {
   const item = items.find((i) => i.itemId === cartItem.itemId);
 
@@ -11,6 +17,14 @@ function CartRow({ cartItem, items, dispatch }) {
 
   const decreaseItemFromCart = () => {
     dispatch({ type: CartTypes.DECREASE, itemId: item.itemId });
+  };
+
+  const getQuantity = (quantityValue) => {
+    dispatch({
+      type: CartTypes.SET_QUANTITY,
+      itemId: item.itemId,
+      quantity: Number(quantityValue),
+    });
   };
 
   return (
@@ -33,6 +47,29 @@ function CartRow({ cartItem, items, dispatch }) {
         <button onClick={removeItemFromCart} type="button">
           X
         </button>
+      </td>
+      <td>
+        <label htmlFor="quantity">
+          Quantity
+          <select
+            style={quantityStyle}
+            onChange={(e) => getQuantity(e.target.value)}
+            id="quantity"
+          >
+            <option value="0" defaultValue>
+              0
+            </option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+          </select>
+        </label>
       </td>
     </tr>
   );
