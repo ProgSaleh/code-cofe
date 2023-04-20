@@ -13,6 +13,7 @@ function Cart({ cart, dispatch, items }) {
   const [isEmployeeOfTheMonth, setIsEmployeeOfTheMonth] = useState(false);
   const debounceRef = useRef(null);
   const zipRef = useRef(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const subTotal = isEmployeeOfTheMonth
     ? 0
@@ -43,13 +44,17 @@ function Cart({ cart, dispatch, items }) {
   const total = subTotal + tax;
   const isFormValid = zipCode.length === 5 && name.trim();
 
-  const submitOrder = (event) => {
-    // TODO:
-
+  const submitOrder = async (event) => {
     event.preventDefault();
-    console.log('name: ', name);
-    console.log('phone: ', phone);
-    console.log('zipcode: ', zipCode);
+    setIsSubmitting(true);
+    try {
+      await axios.post('/api/orders', { items: cart, name, phone, zipCode });
+    } catch (error) {
+      console.error(`Error submitting the order`, error);
+    } finally {
+      setIsSubmitting(false);
+    }
+    console.log('Ordere submitted');
   };
 
   const setFormattedPhone = (newNumber) => {
@@ -142,7 +147,7 @@ function Cart({ cart, dispatch, items }) {
                 ref={zipRef}
               />
             </label>
-            <button type="submit" disabled={!isFormValid}>
+            <button type="submit" disabled={!isFormValid || isSubmitting}>
               Order Now
             </button>
           </form>
