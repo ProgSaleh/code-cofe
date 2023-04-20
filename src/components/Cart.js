@@ -49,9 +49,6 @@ function Cart({ cart, dispatch, items }) {
     setIsSubmitting(true);
     try {
       await axios.post('/api/orders', { items: cart, name, phone, zipCode });
-      setName('');
-      setPhone('');
-      setZipCode('');
     } catch (error) {
       console.error(`Error submitting the order`, error);
     } finally {
