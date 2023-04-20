@@ -15,11 +15,31 @@ import {
 } from './reducers/cartReducer';
 import Cart from './components/Cart';
 
+const storageKey = 'cart';
+
 function App() {
   const [items, setItems] = useState([]);
-  const [cart, dispatch] = useReducer(cartReducer, initialCartState);
+  // const [cart, dispatch] = useReducer(cartReducer, initialCartState);
+  const [cart, dispatch] = useReducer(
+    cartReducer,
+    initialCartState,
+    (initialState) => {
+      try {
+        const storedCart = JSON.parse(localStorage.getItem(storageKey));
+        return storedCart || initialState;
+      } catch (error) {
+        console.log(error);
+        return initialState;
+      }
+      // eslint-disable-next-line
+    }
+  );
   const addToCart = (itemId) => dispatch({ type: CartTypes.ADD, itemId });
   // dispatch({ type: CartTypes.REMOVE, itemId });
+
+  useEffect(() => {
+    localStorage.setItem(storageKey, JSON.stringify(cart));
+  }, [cart]);
 
   useEffect(() => {
     axios
