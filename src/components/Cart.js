@@ -13,6 +13,7 @@ function Cart({ cart, dispatch, items }) {
   const [isEmployeeOfTheMonth, setIsEmployeeOfTheMonth] = useState(false);
   const debounceRef = useRef(null);
   const zipRef = useRef(null);
+  const nameRef = useRef(null);
 
   const subTotal = isEmployeeOfTheMonth
     ? 0
@@ -71,6 +72,10 @@ function Cart({ cart, dispatch, items }) {
     setPhone(formatted);
   };
 
+  if (zipCode.length === 5 && !name.length) {
+    nameRef.current.focus();
+  }
+
   return (
     <div className="cart-component">
       <h2>Your Cart</h2>
@@ -116,6 +121,7 @@ function Cart({ cart, dispatch, items }) {
                 value={name}
                 onChange={(event) => onNameChange(event.target.value)}
                 required
+                ref={nameRef}
               />
             </label>
             <label htmlFor="phone">
