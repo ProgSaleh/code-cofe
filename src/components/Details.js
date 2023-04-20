@@ -1,13 +1,14 @@
 // eslint-disable-next-line
 import { Outlet } from 'react-router-dom';
-// eslint-disable-next-line
-import PropTypes from 'prop-types';
+import { useContext } from 'react';
 import { ItemImages } from '../items';
-import ItemType from '../types/item';
 import Thumbnail from './Thumbnail';
+import ItemsContext from '../contexts/ItemsContext';
 import './Details.css';
 
-function Details({ items }) {
+function Details() {
+  const { items } = useContext(ItemsContext);
+
   return (
     <div className="details-component">
       <Outlet />
@@ -24,9 +25,5 @@ function Details({ items }) {
     </div>
   );
 }
-
-Details.propTypes = {
-  items: PropTypes.arrayOf(ItemType).isRequired,
-};
 
 export default Details;

@@ -1,15 +1,16 @@
 // eslint-disable-next-line
 import { useParams } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { useContext } from 'react';
 import { ItemImages } from '../items';
-import ItemType from '../types/item';
 import './DetailItem.css';
 // eslint-disable-next-line
 import { CartTypes } from '../reducers/cartReducer';
+import ItemsContext from '../contexts/ItemsContext';
 
 // eslint-disable-next-line
-function DetailItem({ addToCart, items }) {
+function DetailItem({ addToCart }) {
   const { id } = useParams();
+  const { items } = useContext(ItemsContext);
   const detailItem = items.find((item) => item.itemId === id);
 
   const addItemToCart = () => {
@@ -40,10 +41,5 @@ function DetailItem({ addToCart, items }) {
     <h2>Unknown Item</h2>
   );
 }
-
-DetailItem.propTypes = {
-  items: PropTypes.arrayOf(ItemType).isRequired,
-  addToCart: PropTypes.func.isRequired,
-};
 
 export default DetailItem;

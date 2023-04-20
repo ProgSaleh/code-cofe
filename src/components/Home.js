@@ -1,11 +1,12 @@
+import { useContext } from 'react';
 // eslint-disable-next-line
-import PropTypes from 'prop-types';
-import itemType from '../types/item';
 import './Home.css';
 import Thumbnail from './Thumbnail';
 import { ItemImages } from '../items';
+import ItemsContext from '../contexts/ItemsContext';
 
-function Home({ items }) {
+function Home() {
+  const { items } = useContext(ItemsContext);
   return (
     <div className="home-component">
       {items.map((item) => (
@@ -19,9 +20,5 @@ function Home({ items }) {
     </div>
   );
 }
-
-Home.propTypes = {
-  items: PropTypes.arrayOf(itemType).isRequired,
-};
 
 export default Home;

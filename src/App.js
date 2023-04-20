@@ -17,6 +17,7 @@ import {
 import Cart from './components/Cart';
 import CurrentUserContext from './contexts/CurrentUserContext';
 import Login from './components/Login';
+import ItemsContext from './contexts/ItemsContext';
 
 const storageKey = 'cart';
 
@@ -63,32 +64,35 @@ function App() {
     // eslint-disable-next-line
     [currentUser]
   );
+  const itemsValue = useMemo(() => ({ items }), [items]);
 
   return (
     <Router>
-      <CurrentUserContext.Provider value={currentUserContextValue}>
-        <Header cart={cart} />
-        {!items.length ? (
-          <div>Loading...</div>
-        ) : (
-          <Routes>
-            <Route path="/details" element={<Details items={items} />}>
+      <ItemsContext.Provider value={itemsValue}>
+        <CurrentUserContext.Provider value={currentUserContextValue}>
+          <Header cart={cart} />
+          {!items.length ? (
+            <div>Loading...</div>
+          ) : (
+            <Routes>
+              <Route path="/details" element={<Details />}>
+                <Route
+                  path=":id"
+                  element={<DetailItem addToCart={addToCart} />}
+                />
+                <Route index element={<div>No Item Selected</div>} />
+              </Route>
+              <Route path="/" element={<Home />} />
               <Route
-                path=":id"
-                element={<DetailItem items={items} addToCart={addToCart} />}
+                path="/cart"
+                element={<Cart cart={cart} dispatch={dispatch} />}
               />
-              <Route index element={<div>No Item Selected</div>} />
-            </Route>
-            <Route path="/" element={<Home items={items} />} />
-            <Route
-              path="/cart"
-              element={<Cart cart={cart} items={items} dispatch={dispatch} />}
-            />
-            <Route path="/login" element={<Login />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        )}
-      </CurrentUserContext.Provider>
+              <Route path="/login" element={<Login />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          )}
+        </CurrentUserContext.Provider>
+      </ItemsContext.Provider>
     </Router>
   );
 }

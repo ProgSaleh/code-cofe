@@ -1,14 +1,15 @@
 import axios from 'axios';
 /* eslint-disable */
 import PropTypes from 'prop-types';
-import { useRef, useState } from 'react';
-import ItemType from '../types/item';
+import { useRef, useContext, useState } from 'react';
 import CartRow from './CartRow';
 import './Cart.css';
 import Alert from './Alert';
 import { CartTypes } from '../reducers/cartReducer';
+import ItemsContext from '../contexts/ItemsContext';
 
-function Cart({ cart, dispatch, items }) {
+function Cart({ cart, dispatch }) {
+  const { items } = useContext(ItemsContext);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [zipCode, setZipCode] = useState('');
@@ -179,7 +180,6 @@ Cart.propTypes = {
     })
   ).isRequired,
   dispatch: PropTypes.func.isRequired,
-  items: PropTypes.arrayOf(ItemType).isRequired,
 };
 
 export default Cart;
