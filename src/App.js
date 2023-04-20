@@ -1,6 +1,7 @@
 // eslint-disable-next-line
 import axios from 'axios';
-import { useEffect, useReducer, useState } from 'react';
+// eslint-disable-next-line
+import { useEffect, useMemo, useReducer, useState } from 'react';
 // eslint-disable-next-line
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
@@ -14,12 +15,14 @@ import {
   initialCartState,
 } from './reducers/cartReducer';
 import Cart from './components/Cart';
+import CurrentUserContext from './contexts/CurrentUserContext';
+import Login from './components/Login';
 
 const storageKey = 'cart';
 
 function App() {
   const [items, setItems] = useState([]);
-  // const [cart, dispatch] = useReducer(cartReducer, initialCartState);
+  const [currentUser, setCurrentUser] = useState({});
   const [cart, dispatch] = useReducer(
     cartReducer,
     initialCartState,
@@ -43,33 +46,49 @@ function App() {
 
   useEffect(() => {
     axios
+      .get('/api/auth/current-user')
+      .then((response) => setCurrentUser(response?.data))
+      .catch(console.error);
+  }, []);
+
+  useEffect(() => {
+    axios
       .get('/api/items')
       .then((result) => setItems(result.data))
       .catch(console.error);
   }, []);
 
+  const currentUserContextValue = useMemo(
+    () => ({ currentUser, setCurrentUser }),
+    // eslint-disable-next-line
+    [currentUser]
+  );
+
   return (
     <Router>
-      <Header cart={cart} />
-      {!items.length ? (
-        <div>Loading...</div>
-      ) : (
-        <Routes>
-          <Route path="/details" element={<Details items={items} />}>
+      <CurrentUserContext.Provider value={currentUserContextValue}>
+        <Header cart={cart} />
+        {!items.length ? (
+          <div>Loading...</div>
+        ) : (
+          <Routes>
+            <Route path="/details" element={<Details items={items} />}>
+              <Route
+                path=":id"
+                element={<DetailItem items={items} addToCart={addToCart} />}
+              />
+              <Route index element={<div>No Item Selected</div>} />
+            </Route>
+            <Route path="/" element={<Home items={items} />} />
             <Route
-              path=":id"
-              element={<DetailItem items={items} addToCart={addToCart} />}
+              path="/cart"
+              element={<Cart cart={cart} items={items} dispatch={dispatch} />}
             />
-            <Route index element={<div>No Item Selected</div>} />
-          </Route>
-          <Route path="/" element={<Home items={items} />} />
-          <Route
-            path="/cart"
-            element={<Cart cart={cart} items={items} dispatch={dispatch} />}
-          />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      )}
+            <Route path="/login" element={<Login />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        )}
+      </CurrentUserContext.Provider>
     </Router>
   );
 }
