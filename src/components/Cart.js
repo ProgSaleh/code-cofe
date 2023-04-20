@@ -5,6 +5,8 @@ import { useRef, useState } from 'react';
 import ItemType from '../types/item';
 import CartRow from './CartRow';
 import './Cart.css';
+import Alert from './Alert';
+import { CartTypes } from '../reducers/cartReducer';
 
 function Cart({ cart, dispatch, items }) {
   const [name, setName] = useState('');
@@ -14,6 +16,8 @@ function Cart({ cart, dispatch, items }) {
   const debounceRef = useRef(null);
   const zipRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [apiError, setApiError] = useState('');
 
   const subTotal = isEmployeeOfTheMonth
     ? 0
@@ -44,19 +48,6 @@ function Cart({ cart, dispatch, items }) {
   const total = subTotal + tax;
   const isFormValid = zipCode.length === 5 && name.trim();
 
-  const submitOrder = async (event) => {
-    event.preventDefault();
-    setIsSubmitting(true);
-    try {
-      await axios.post('/api/orders', { items: cart, name, phone, zipCode });
-    } catch (error) {
-      console.error(`Error submitting the order`, error);
-    } finally {
-      setIsSubmitting(false);
-    }
-    console.log('Ordere submitted');
-  };
-
   const setFormattedPhone = (newNumber) => {
     const digits = newNumber.replace(/\D/g, '');
     let formatted = digits.substring(0, 3);
@@ -76,8 +67,31 @@ function Cart({ cart, dispatch, items }) {
     setPhone(formatted);
   };
 
+  const submitOrder = async (event) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+    setApiError('');
+    try {
+      await axios.post('/api/orders', { items: cart, name, phone, zipCode });
+      setShowSuccessAlert(true);
+      dispatch({ type: CartTypes.EMPTY });
+    } catch (error) {
+      console.error(`Error submitting the order`, error);
+      setApiError(error?.response?.data?.error || 'Unknown Error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
     <div className="cart-component">
+      <Alert visible={showSuccessAlert} type="success">
+        Thank you for your order!
+      </Alert>
+      <Alert visible={!!apiError} type="error">
+        <p>There was an error submitting your order.</p>
+        <p>{apiError}</p>
+        <p>Please try again.</p>
+      </Alert>
       <h2>Your Cart</h2>
       {cart.length === 0 ? (
         <div>Your cart is empty.</div>
