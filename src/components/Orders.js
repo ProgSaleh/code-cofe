@@ -3,19 +3,14 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ItemType from '../types/item';
-import './Orders.css';
 import { useCurrentUserContext } from '../contexts/CurrentUserContext';
+import Alert from './Alert';
+import './Orders.css';
 
 function Orders({ items }) {
   const [orders, setOrders] = useState([]);
   const { currentUser } = useCurrentUserContext();
-
-  // const loadOrders = () => {
-  //   axios
-  //     .get('/api/orders')
-  //     .then((response) => setOrders(response.data))
-  //     .catch(console.error);
-  // };
+  const [apiError, setApiError] = useState('');
 
   useEffect(() => {
     if (currentUser.access === 'associate') {
@@ -31,7 +26,6 @@ function Orders({ items }) {
         console.error(error);
       };
       ws.onmessage = (message) => {
-        console.log('message::', message);
         const newOrders = JSON.parse(message.data);
         setOrders(newOrders);
       };
@@ -50,8 +44,9 @@ function Orders({ items }) {
   const deleteOrder = async (order) => {
     try {
       await axios.delete(`/api/orders/${order.id}`);
-      // loadOrders();
+      // await axios.delete(`/api/orders/${0}`);
     } catch (error) {
+      setApiError(error?.message);
       console.error(error);
     }
   };
@@ -59,6 +54,11 @@ function Orders({ items }) {
   return (
     <div className="orders-component">
       <h2>Existing Orders</h2>
+      <Alert visible={!!apiError} type="error">
+        <p>There was an error when deleting an order</p>
+        <p>{apiError}</p>
+        <p>Please try again.</p>
+      </Alert>
       {!orders.length ? (
         <div>
           {currentUser.access === 'associate' ? 'No Orders.' : 'Access Denied'}
