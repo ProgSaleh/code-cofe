@@ -31,7 +31,6 @@ function Orders({ items }) {
         console.error(error);
       };
       ws.onmessage = (message) => {
-        console.log('message::', message);
         const newOrders = JSON.parse(message.data);
         setOrders(newOrders);
       };

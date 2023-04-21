@@ -21,7 +21,7 @@ function Login() {
         password,
       });
       setCurrentUser(result.data);
-      navigate('/');
+      navigate(`${result.data.access === 'associate' ? '/orders' : '/'}`);
     } catch (error) {
       setApiError(error?.response?.data?.error || 'Unknown Error');
       console.error(error);
@@ -70,7 +70,5 @@ function Login() {
     </div>
   );
 }
-
-// Login.proptypes = {};
 
 export default Login;
