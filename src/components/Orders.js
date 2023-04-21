@@ -9,13 +9,7 @@ import { useCurrentUserContext } from '../contexts/CurrentUserContext';
 function Orders({ items }) {
   const [orders, setOrders] = useState([]);
   const { currentUser } = useCurrentUserContext();
-
-  // const loadOrders = () => {
-  //   axios
-  //     .get('/api/orders')
-  //     .then((response) => setOrders(response.data))
-  //     .catch(console.error);
-  // };
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (currentUser.access === 'associate') {
@@ -31,8 +25,8 @@ function Orders({ items }) {
         console.error(error);
       };
       ws.onmessage = (message) => {
-        console.log('message::', message);
         const newOrders = JSON.parse(message.data);
+        setLoading(false);
         setOrders(newOrders);
       };
       ws.onclose = () => {
@@ -60,9 +54,15 @@ function Orders({ items }) {
     <div className="orders-component">
       <h2>Existing Orders</h2>
       {!orders.length ? (
-        <div>
-          {currentUser.access === 'associate' ? 'No Orders.' : 'Access Denied'}
-        </div>
+        loading ? (
+          <p>Loading...</p>
+        ) : (
+          <div>
+            {currentUser.access === 'associate'
+              ? 'No Orders.'
+              : 'Access Denied'}
+          </div>
+        )
       ) : (
         orders.map((order) => (
           <div className="order" key={order.id}>
