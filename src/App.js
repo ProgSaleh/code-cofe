@@ -17,6 +17,7 @@ import {
 import Cart from './components/Cart';
 import CurrentUserContext from './contexts/CurrentUserContext';
 import Login from './components/Login';
+import Orders from './components/Orders';
 
 const storageKey = 'cart';
 
@@ -85,6 +86,7 @@ function App() {
               element={<Cart cart={cart} items={items} dispatch={dispatch} />}
             />
             <Route path="/login" element={<Login />} />
+            <Route path="/orders" element={<Orders items={items} />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         )}
