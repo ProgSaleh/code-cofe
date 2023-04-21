@@ -1,13 +1,11 @@
 import axios from 'axios';
-import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-// import PropTypes from 'prop-types';
 import Profile from '../images/profile.svg';
-import CurrentUserContext from '../contexts/CurrentUserContext';
+import { useCurrentUserContext } from '../contexts/CurrentUserContext';
 import './UserDetails.css';
 
 function UserDetails() {
-  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
+  const { currentUser, setCurrentUser } = useCurrentUserContext();
 
   const logout = async () => {
     try {
@@ -36,7 +34,5 @@ function UserDetails() {
     </div>
   );
 }
-
-UserDetails.propTypes = {};
 
 export default UserDetails;

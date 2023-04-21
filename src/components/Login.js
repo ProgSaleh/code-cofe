@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useState, useContext } from 'react';
-import CurrentUserContext from '../contexts/CurrentUserContext';
+import { useState } from 'react';
+import { useCurrentUserContext } from '../contexts/CurrentUserContext';
 import Alert from './Alert';
 import './Login.css';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const { setCurrentUser } = useContext(CurrentUserContext);
+  const { setCurrentUser } = useCurrentUserContext();
   const navigate = useNavigate('');
   const [apiError, setApiError] = useState('');
 
